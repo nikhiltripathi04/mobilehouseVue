@@ -1,37 +1,19 @@
 <template>
-  <div class="w-screen overflow-x-hidden">
+    <div class="w-screen overflow-x-hidden">
     <div class="container mx-auto px-4">
-      <nav class="flex justify-between mt-4 container mx-auto items-center">
-        <div class="logo text-2xl">Mobile House</div>
-
-        <div class="menu-links text-xs lg:text-sm hidden lg:flex">
-          <ul>
-            <li>about</li>
-            <li>mobile</li>
-            <li>accessories</li>
-            <li>news</li>
-            <li>contact</li>
-            <li>own a phone</li>
-          </ul>
-        </div>
-
-        <div class="cart bg-black p-2 text-white h-8 w-8 center rounded-full">
-          <i class="i las la-shopping-cart"></i>
-        </div>
-      </nav>
-
       <div class="relative h-screen">
+
         <!-- PAGE 1 -->
         <div :class="['page', { 'is-active': currentPage === 1 }]" class="absolute w-full" data-page="1">
           <main class="flex flex-wrap items-center mt-12 justify-center">
             <div class="tagline lg:text-3xl text-lg">Apple</div>
             <div class="pages"><span>1</span>/4</div>
             <div class="title text-center">Iphone 17</div>
-            <div class="more hidden md:block"><a href="#">specifications</a></div>
+            <div class="more hidden md:block">
+              <a @click.prevent="goToMobiles(getBrandForPage(1))" href="#" class="cursor-pointer">Explore more.</a>
+            </div>
             <div class="desc hidden md:block">
-              <p>
-                Sleek. <span>Smarter. </span> Simply futuristic. <br>
-              </p>
+              <p>Sleek. <span>Smarter.</span> Simply futuristic.<br></p>
             </div>
           </main>
           <div class="juice">
@@ -45,11 +27,11 @@
             <div class="tagline lg:text-3xl text-lg">Samsung</div>
             <div class="pages"><span>2</span>/4</div>
             <div class="title text-center">Galaxy S25</div>
-            <div class="more hidden md:block"><a href="#">specifications</a></div>
+            <div class="more hidden md:block">
+              <a @click.prevent="goToMobiles(getBrandForPage(2))" href="#" class="cursor-pointer">Explore more.</a>
+            </div>
             <div class="desc hidden md:block">
-              <p>
-                Sleek. <span>Smarter. </span> Simply futuristic. <br>
-              </p>
+              <p>Sleek. <span>Smarter.</span> Simply futuristic.<br></p>
             </div>
           </main>
           <div class="juice">
@@ -63,11 +45,11 @@
             <div class="tagline lg:text-3xl text-lg">Google</div>
             <div class="pages"><span>3</span>/4</div>
             <div class="title text-center">Pixel 10</div>
-            <div class="more hidden md:block"><a href="#">specifications</a></div>
+            <div class="more hidden md:block">
+              <a @click.prevent="goToMobiles(getBrandForPage(3))" href="#" class="cursor-pointer">Explore more.</a>
+            </div>
             <div class="desc hidden md:block">
-              <p>
-                Sleek. <span>Smarter. </span> Simply futuristic. <br>
-              </p>
+              <p>Sleek. <span>Smarter.</span> Simply futuristic.<br></p>
             </div>
           </main>
           <div class="juice">
@@ -81,36 +63,27 @@
             <div class="tagline lg:text-3xl text-lg">OnePlus</div>
             <div class="pages"><span>4</span>/4</div>
             <div class="title text-center">OnePlus 13</div>
-            <div class="more hidden md:block"><a href="#">specifications</a></div>
+            <div class="more hidden md:block">
+              <a @click.prevent="goToMobiles(getBrandForPage(4))" href="#" class="cursor-pointer">Explore more.</a>
+            </div>
             <div class="desc hidden md:block">
-              <p>
-                Sleek. <span>Smarter. </span> Simply futuristic. <br>
-              </p>
+              <p>Sleek. <span>Smarter.</span> Simply futuristic.<br></p>
             </div>
           </main>
           <div class="juice">
             <img src="/images/oneplus13.webp" alt="OnePlus 13">
           </div>
         </div>
+
       </div>
 
       <div class="leaves !z-50">
         <ul id="scene">
-          <li class="layer" data-depth="-.1">
-            <img src="@/assets/images/pageFour/leaf01.png" alt="">
-          </li>
-          <li class="layer" data-depth="-.3">
-            <img src="@/assets/images/pageFour/leaf02.png" alt="">
-          </li>
-          <li class="layer" data-depth="-1.5">
-            <img src="@/assets/images/pageFour/leaf03.png" alt="">
-          </li>
-          <li class="layer" data-depth=".1">
-            <img src="@/assets/images/pageFour/leaf04.png" alt="">
-          </li>
-          <li class="layer" data-depth=".3">
-            <img src="@/assets/images/pageFour/leaf05.png" alt="">
-          </li>
+          <li class="layer" data-depth="-.1"><img src="@/assets/images/pageFour/leaf01.png"></li>
+          <li class="layer" data-depth="-.3"><img src="@/assets/images/pageFour/leaf02.png"></li>
+          <li class="layer" data-depth="-1.5"><img src="@/assets/images/pageFour/leaf03.png"></li>
+          <li class="layer" data-depth=".1"><img src="@/assets/images/pageFour/leaf04.png"></li>
+          <li class="layer" data-depth=".3"><img src="@/assets/images/pageFour/leaf05.png"></li>
         </ul>
       </div>
 
@@ -123,94 +96,90 @@
 </template>
 
 <script setup lang="ts">
-import Parallax from 'parallax-js'
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
+import Parallax from 'parallax-js'
 import { setTitle } from '@/composables/utils'
+import { useRouter } from 'vue-router'
 
-setTitle('Animation Four')
+setTitle('Mobile House')
 
+const router = useRouter()
 const currentPage = ref(1)
 
+// Map page numbers to brands
+const getBrandForPage = (page: number) => {
+	switch (page) {
+		case 1: return 'Apple'
+		case 2: return 'Samsung'
+		case 3: return 'Google'
+		case 4: return 'OnePlus'
+		default: return 'Apple'
+	}
+}
+
+const goToMobiles = (brand: string) => {
+	router.push({
+		path: '/mobile',
+		query: { brand }
+	})
+}
+
 const changePage = (direction: 'next' | 'prev') => {
-  const max = 4
-  const min = 1
-  if ((direction === 'next' && currentPage.value >= max) ||
-      (direction === 'prev' && currentPage.value <= min)) return
+	const max = 4
+	const min = 1
+	if ((direction === 'next' && currentPage.value >= max) ||
+		(direction === 'prev' && currentPage.value <= min)) return
 
-  const current = currentPage.value
-  const next = direction === 'next' ? current + 1 : current - 1
+	const current = currentPage.value
+	const next = direction === 'next' ? current + 1 : current - 1
 
-  const currentSel = `.page[data-page="${current}"]`
-  const nextSel    = `.page[data-page="${next}"]`
+	const currentSel = `.page[data-page="${current}"]`
+	const nextSel = `.page[data-page="${next}"]`
 
-  const xFrom = direction === 'next' ? 100 : -100
-  const xTo   = direction === 'next' ? -100 : 100
+	const xFrom = direction === 'next' ? 100 : -100
+	const xTo = direction === 'next' ? -100 : 100
 
-  // Animate out the current page
-  gsap.to(currentSel, {
-    opacity: 0,
-    x: xTo,
-    duration: 0.5,
-    ease: 'Power2.easeIn',
-    onComplete: () => {
-      // Swap active class after fade-out
-      const curEl = document.querySelector(currentSel)
-      const nextEl = document.querySelector(nextSel)
-      curEl?.classList.remove('is-active')
-      nextEl?.classList.add('is-active')
+	gsap.to(currentSel, {
+		opacity: 0,
+		x: xTo,
+		duration: 0.5,
+		onComplete: () => {
+			document.querySelector(currentSel)?.classList.remove('is-active')
+			document.querySelector(nextSel)?.classList.add('is-active')
 
-      // Prepare and animate the next page in
-      gsap.fromTo(nextSel, { opacity: 0, x: xFrom }, {
-        opacity: 1,
-        x: 0,
-        duration: 0.5,
-        ease: 'Power2.easeOut'
-      })
-
-      currentPage.value = next
-    }
-  })
+			gsap.fromTo(nextSel, { opacity: 0, x: xFrom }, { opacity: 1, x: 0, duration: 0.5 })
+			currentPage.value = next
+		}
+	})
 }
 
 onMounted(() => {
-  const scene = document.getElementById('scene')
-  if (scene) new Parallax(scene)
+	const scene = document.getElementById('scene')
+	if (scene) new Parallax(scene)
 
-  // Ensure the first page is visible for initial animations
-  gsap.set('.page.is-active', { opacity: 1, x: 0 })
+	gsap.set('.page.is-active', { opacity: 1, x: 0 })
 
-  gsap.from('.logo', { duration: 1, opacity: 0, x: -20, ease: 'Expo.easeInOut' })
+	gsap.from('.juice', { delay: 2, duration: 1, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
 
-  gsap.from('.menu-links ul li', {
-    opacity: 0,
-    x: -20,
-    ease: 'Power3.easeInOut',
-    stagger: 0.08,
-    duration: 1
-  })
+	gsap.from('.leaves .layer:nth-child(1)', { delay: 2,   duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
+	gsap.from('.leaves .layer:nth-child(2)', { delay: 2.1, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
+	gsap.from('.leaves .layer:nth-child(3)', { delay: 2.2, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
+	gsap.from('.leaves .layer:nth-child(4)', { delay: 2.3, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
+	gsap.from('.leaves .layer:nth-child(5)', { delay: 2.5, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
 
-  gsap.from('.cart', { delay: 0.7, duration: 1, opacity: 0, x: -20, ease: 'Expo.easeInOut' })
+	gsap.from('.title',  { delay: 1,   duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
+	gsap.from('.tagline',{ delay: 1.3, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
+	gsap.from('.pages',  { delay: 1.3, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
+	gsap.from('.more',   { delay: 1.4, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
+	gsap.from('.desc',   { delay: 1.4, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
 
-  gsap.from('.juice', { delay: 2, duration: 1, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
-
-  gsap.from('.leaves .layer:nth-child(1)', { delay: 2,   duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
-  gsap.from('.leaves .layer:nth-child(2)', { delay: 2.1, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
-  gsap.from('.leaves .layer:nth-child(3)', { delay: 2.2, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
-  gsap.from('.leaves .layer:nth-child(4)', { delay: 2.3, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
-  gsap.from('.leaves .layer:nth-child(5)', { delay: 2.5, duration: 2, opacity: 0, y: -800, ease: 'Expo.easeInOut' })
-
-  gsap.from('.title',  { delay: 1,   duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
-  gsap.from('.tagline',{ delay: 1.3, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
-  gsap.from('.pages',  { delay: 1.3, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
-  gsap.from('.more',   { delay: 1.4, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
-  gsap.from('.desc',   { delay: 1.4, duration: 1, opacity: 0, y: 20, ease: 'Expo.easeInOut' })
-
-  gsap.from('.arrows', { delay: 2,   duration: 1, opacity: 0, ease: 'Expo.easeInOut' })
+	gsap.from('.arrows', { delay: 2,   duration: 1, opacity: 0, ease: 'Expo.easeInOut' })
 })
 </script>
 
 <style scoped>
+/* Your existing styling stays exactly the same */
 body {
   width: 100%;
   height: 100vh;
@@ -317,4 +286,5 @@ ul { list-style: none; }
   color: #fff;
   background: #000;
 }
+
 </style>

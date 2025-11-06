@@ -1,3 +1,12 @@
+// Add direct routes
+const directRoutes = [
+	{
+		path: '/mobile',
+		name: 'mobile',
+		component: () => import('../views/Mobile.vue')
+	}
+]
+
 const getPath = (page: string[]) => page.map((path) => {
 	if (path === 'index') return ''
 	if (path === '_') return ':pathMatch(.*)*'
@@ -28,13 +37,16 @@ const allPages = Object.entries(import.meta.glob('../views/**/*.vue'))
 
 const nestedPages = allPages.filter((page) => page.parent)
 
-export const routes = allPages.filter((page) => !page.parent)
-	.map((page) => {
-		const path = getPath(page.path)
-		const childrenPages = nestedPages.filter((p) => p.parent === path).map((p) => p.path)
+export const routes = [
+	...directRoutes,
+	...allPages.filter((page) => !page.parent)
+		.map((page) => {
+			const path = getPath(page.path)
+			const childrenPages = nestedPages.filter((p) => p.parent === path).map((p) => p.path)
 
-		const route = makeRoute(page.path)
-		const children = childrenPages.map(makeRoute)
+			const route = makeRoute(page.path)
+			const children = childrenPages.map(makeRoute)
 
-		return { ...route, children }
-	})
+			return { ...route, children }
+		})
+]
